@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import StudentList from "./StudentList";
-import StudentRegistrationForm from "./StudentForm";
+import StudentForm from "./StudentForm";
 
 export type View = "list" | "add" | "edit";
 
@@ -22,7 +22,7 @@ export default function StudentManager() {
     <>
       {view === "list" && <StudentList onAdd={openAdd} onEdit={openEdit} />}
       {(view === "add" || view === "edit") && (
-        <StudentRegistrationForm
+        <StudentForm
           onBack={() => setView("list")}
           editId={editId}
         />

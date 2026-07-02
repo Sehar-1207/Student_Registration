@@ -42,32 +42,32 @@ export default function StudentList({ onAdd, onEdit, }: {
     localStorage.setItem("students", JSON.stringify(updatedStudents));
   };
 
-  return (
-    <div className="min-h-screen bg-gray-300 flex items-center justify-center px-4">
-      <div className="w-full max-w-5xl bg-white rounded-lg p-6 shadow-lg">
-        <div className="flex flex-col sm:flex-row justify-center items-center mb-6 gap-4">
-          <h1 className="text-3xl font-bold">List of all Students</h1>
+ return (
+    <div className="min-h-screen bg-gray-300 p-4 md:p-8">
+      <div className="w-full max-w-5xl mx-auto bg-white rounded-lg p-4 md:p-6 shadow-lg">
+        <div className="flex justify-center mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-center">List of all Students</h1>
         </div>
-
-        <div className="flex justify-between mb-6">
+        <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-6">
           <button
             onClick={onAdd}
-            className="bg-blue-600 text-white px-6 py-2 flex items-center rounded-md hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-6 py-2 flex items-center justify-center gap-2 rounded-md hover:bg-blue-700 transition"
           >
             <CirclePlusIcon size={18} />
             Add New Student
           </button>
 
-          <div className="relative w-full max-w-md flex items-center border border-gray-300 rounded-md shadow-sm">
+          <div className="relative w-full md:max-w-md flex items-center border border-gray-300 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-blue-500 overflow-hidden">
             <input
               type="text"
               placeholder="Search by name, email or course"
-              className="w-full p-1 pl-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 pl-3 outline-none"
               value={searchItem}
               onChange={(e) => setSearchItem(e.target.value)}
             />
-            <SearchIcon size={18} />
-            <div className="pr-3 text-gray-500"></div>
+            <div className="pr-3 text-gray-500">
+              <SearchIcon size={18} />
+            </div>
           </div>
         </div>
 

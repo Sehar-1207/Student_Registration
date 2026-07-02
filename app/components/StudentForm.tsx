@@ -7,7 +7,7 @@ type RegistrationProps ={
   editId: number | null;
 }
 
-export default function StudentRegistrationForm({onBack, editId,}: RegistrationProps) {
+export default function StudentForm({onBack, editId,}: RegistrationProps) {
   const [student, setStudent] = useState({
     name: "",
     email: "",
