@@ -1,12 +1,10 @@
 import Image from "next/image";
-import StudentRegistrationForm from "./components/StudentRegistrationForm";
-import StudentList from "./components/StudentList";
+import StudentManager from "./components/StudentManager";
 
 export default function Home() {
   return (
     <>
-    <StudentRegistrationForm/>
-    <StudentList/>
+    <StudentManager/>
     </>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import { Pencil, Trash2 } from "lucide-react";
 type Student = {
   id: number;
   name: string;
@@ -52,14 +52,14 @@ export default function StudentTable({
                   onClick={() => onEdit(student)}
                   className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                 >
-                  Edit
+                  <Pencil size={18} />
                 </button>
 
                 <button
                   onClick={() => onDelete(student.id)}
                   className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                 >
-                  Delete
+                 <Trash2 size={18} />
                 </button>
               </td>
             </tr>
