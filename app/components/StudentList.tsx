@@ -85,7 +85,6 @@ export default function StudentList({
         ) : (
           <div className="text-center py-10 text-gray-500">
             <p className="text-lg">No records found</p>
-            <p className="text-sm">Try adjusting your search criteria.</p>
           </div>
         )}
       </div>
