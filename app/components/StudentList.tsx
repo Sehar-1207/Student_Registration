@@ -13,7 +13,10 @@ type Student = {
   course: string;
 };
 
-export default function StudentList({ onAdd, onEdit, }: {
+export default function StudentList({
+  onAdd,
+  onEdit,
+}: {
   onAdd: () => void;
   onEdit: (id: number) => void;
 }) {
@@ -42,11 +45,13 @@ export default function StudentList({ onAdd, onEdit, }: {
     localStorage.setItem("students", JSON.stringify(updatedStudents));
   };
 
- return (
+  return (
     <div className="min-h-screen bg-gray-300 p-4 md:p-8">
       <div className="w-full max-w-5xl mx-auto bg-white rounded-lg p-4 md:p-6 shadow-lg">
         <div className="flex justify-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-center">List of all Students</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-center">
+            List of all Students
+          </h1>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-6">
           <button
@@ -71,11 +76,18 @@ export default function StudentList({ onAdd, onEdit, }: {
           </div>
         </div>
 
-        <StudentTable
-          students={filteredStudents}
-          onEdit={(student) => onEdit(student.id)}
-          onDelete={handleDelete}
-        />
+        {filteredStudents.length > 0 ? (
+          <StudentTable
+            students={filteredStudents}
+            onEdit={(student) => onEdit(student.id)}
+            onDelete={handleDelete}
+          />
+        ) : (
+          <div className="text-center py-10 text-gray-500">
+            <p className="text-lg">No records found</p>
+            <p className="text-sm">Try adjusting your search criteria.</p>
+          </div>
+        )}
       </div>
     </div>
   );
