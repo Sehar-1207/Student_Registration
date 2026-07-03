@@ -1,47 +1,96 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 
-type RegistrationProps ={
+type Student = {
+  id?: number;
+  name: string;
+  email: string;
+  age: string;
+  gender: string;
+  course: string;
+  isRegistered: boolean;
+  registeredAt: string;
+};
+
+type RegistrationProps = {
   onBack: () => void;
   editId: number | null;
-}
+};
 
-export default function StudentForm({onBack, editId,}: RegistrationProps) {
-  const [student, setStudent] = useState({
+export default function StudentForm({
+  onBack,
+  editId,
+}: RegistrationProps) {
+  const [student, setStudent] = useState<Student>({
     name: "",
     email: "",
     age: "",
     gender: "Male",
     course: "",
+    isRegistered: false,
+    registeredAt: "",
   });
 
   useEffect(() => {
     if (editId) {
-      const existing = JSON.parse(localStorage.getItem("students") || "[]");
-      const found = existing.find((s: any) => s.id === editId);
-      if (found) setStudent(found);
+      const existing: Student[] = JSON.parse(
+        localStorage.getItem("students") || "[]"
+      );
+
+      const found = existing.find((s) => s.id === editId);
+
+      if (found) {
+        setStudent(found);
+      }
     }
   }, [editId]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setStudent({ ...student, [e.target.id]: e.target.value });
+    setStudent({
+      ...student,
+      [e.target.id]: e.target.value,
+    });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
-    const existing = JSON.parse(localStorage.getItem("students") || "[]");
+
+    const existing: Student[] = JSON.parse(
+      localStorage.getItem("students") || "[]"
+    );
 
     if (editId) {
-      const updated = existing.map((s: any) =>
-        s.id === editId ? { id: editId, ...student } : s,
+      const updated = existing.map((s) =>
+        s.id === editId
+          ? {
+              ...student,
+              id: editId,
+            }
+          : s
       );
-      localStorage.setItem("students", JSON.stringify(updated));
+
+      localStorage.setItem(
+        "students",
+        JSON.stringify(updated)
+      );
     } else {
-      existing.push({ id: Date.now(), ...student });
-      localStorage.setItem("students", JSON.stringify(existing));
+      existing.push({
+        id: Date.now(),
+        ...student,
+        isRegistered: false,
+        registeredAt: "",
+      });
+
+      localStorage.setItem(
+        "students",
+        JSON.stringify(existing)
+      );
     }
 
     onBack();
@@ -54,7 +103,8 @@ export default function StudentForm({onBack, editId,}: RegistrationProps) {
           onClick={onBack}
           className="flex items-center text-gray-600 hover:text-black mb-4 transition"
         >
-          <ArrowLeft size={20} className="mr-1" /> Back to List
+          <ArrowLeft size={20} className="mr-1" />
+          Back to List
         </button>
 
         <h1 className="text-3xl font-bold text-center mb-6">
@@ -70,10 +120,10 @@ export default function StudentForm({onBack, editId,}: RegistrationProps) {
             <input
               id="name"
               type="text"
-              placeholder="Enter your name"
               className="w-full border rounded-md p-2"
               value={student.name}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -85,10 +135,10 @@ export default function StudentForm({onBack, editId,}: RegistrationProps) {
             <input
               id="email"
               type="email"
-              placeholder="Enter your email"
               className="w-full border rounded-md p-2"
               value={student.email}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -100,10 +150,10 @@ export default function StudentForm({onBack, editId,}: RegistrationProps) {
             <input
               id="age"
               type="number"
-              placeholder="Enteer your age"
               className="w-full border rounded-md p-2"
               value={student.age}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -132,10 +182,10 @@ export default function StudentForm({onBack, editId,}: RegistrationProps) {
             <input
               id="course"
               type="text"
-              placeholder="Enter course"
               className="w-full border rounded-md p-2"
               value={student.course}
               onChange={handleChange}
+              required
             />
           </div>
 
