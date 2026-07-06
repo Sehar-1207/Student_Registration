@@ -106,7 +106,7 @@ export default function StudentForm({ onBack, onSubmit, editId, students }: Stud
         </div>
 
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Course Assigned</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Course </label>
           <input
             type="text"
             required
