@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { Search, Plus, Filter, Pencil, Trash2, CheckCircle2, Circle } from "lucide-react";
 import { Student } from "../components/student";
 
-type SortField = "name" | "age" | "course" | "none";
+type SortField = "name" | "age" | "course" | "email" | "none";
 
 interface StudentListProps {
   students: Student[];
@@ -64,13 +64,13 @@ export default function StudentList({
               }`}
             >
               <Filter size={18} />
-              <span>Filters</span>
+              <span>Filter </span>
             </button>
 
             {showFilterDropdown && (
               <div className="absolute left-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-30 py-1 text-sm">
                 <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">Show Column</div>
-                {(["none", "name", "course"] as SortField[]).map((field) => (
+                {(["none", "name", "email", "course"] as SortField[]).map((field) => (
                   <button
                     key={field}
                     onClick={() => { setSortField(field); setShowFilterDropdown(false); }}
@@ -78,7 +78,7 @@ export default function StudentList({
                       sortField === field ? "bg-purple-50 text-[#8b5cf6] font-semibold" : "text-[#1e293b] hover:bg-slate-50"
                     }`}
                   >
-                    {field === "none" ? "Show All Columns" : `Only ${field}s`}
+                    {field === "none" ? "Show All Columns" : `Only ${field === "email" ? "Emails" : field + "s"}`}
                   </button>
                 ))}
               </div>
@@ -143,8 +143,8 @@ export default function StudentList({
                           {student.name}
                         </h4>
                       )}
-                      {sortField === "none" && activeTab === "pending" && (
-                        <p className="text-xs text-slate-400 truncate max-w-[180px] xs:max-w-xs">{student.email}</p>
+                      {(sortField === "none" || sortField === "email") && (
+                        <p className={`text-xs truncate max-w-[180px] xs:max-w-xs ${activeTab === "completed" ? "line-through text-slate-400 font-normal" : "text-slate-400"}`}>{student.email}</p>
                       )}
                     </div>
                   </div>
@@ -204,10 +204,11 @@ export default function StudentList({
                     )}
                     
                     {sortField === "none" && activeTab === "pending" && (
-                      <>
-                        <th className="py-4 px-2 w-[10%] bg-slate-50">Age</th>
-                        <th className="py-4 px-2 w-[28%] bg-slate-50">Email</th>
-                      </>
+                      <th className="py-4 px-2 w-[10%] bg-slate-50">Age</th>
+                    )}
+
+                    {(sortField === "none" || sortField === "email") && (
+                      <th className={`py-4 px-2 bg-slate-50 ${sortField === "email" ? "w-[80%]" : "w-[28%]"}`}>Email</th>
                     )}
                     
                     {(sortField === "none" || sortField === "course") && (
@@ -248,14 +249,17 @@ export default function StudentList({
                       )}
 
                       {sortField === "none" && activeTab === "pending" && (
-                        <>
-                          <td className="py-4 px-2 w-[10%] text-slate-500">{student.age}</td>
-                          <td className="py-4 px-2 w-[28%] text-slate-400 truncate font-normal">{student.email}</td>
-                        </>
+                        <td className="py-4 px-2 w-[10%] text-slate-500">{student.age}</td>
+                      )}
+
+                      {(sortField === "none" || sortField === "email") && (
+                        <td className={`py-4 px-2 truncate font-normal ${activeTab === "completed" ? "text-slate-400 line-through" : "text-slate-400"} ${sortField === "email" ? "w-[80%]" : "w-[28%]"}`}>
+                          {student.email}
+                        </td>
                       )}
 
                       {(sortField === "none" || sortField === "course") && (
-                        <td className={`py-4 px-2 truncate ${activeTab === "completed" ? "text-slate-400 font-normal" : ""} ${sortField === "course" ? "w-[80%]" : "w-[24%]"}`}>
+                        <td className={`py-4 px-2 truncate ${activeTab === "completed" ? "text-slate-400 font-normal line-through" : ""} ${sortField === "course" ? "w-[80%]" : "w-[24%]"}`}>
                           {student.course}
                         </td>
                       )}
