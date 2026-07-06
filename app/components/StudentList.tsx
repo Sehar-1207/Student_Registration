@@ -40,9 +40,8 @@ export default function StudentList({
       );
     }
 
-    if (sortField !== "none") {
+    if (sortField !== "none" && sortField !== "age") {
       result = [...result].sort((a, b) => {
-        if (sortField === "age") return a.age - b.age;
         return a[sortField].localeCompare(b[sortField]);
       });
     }
@@ -65,13 +64,13 @@ export default function StudentList({
               }`}
             >
               <Filter size={18} />
-              <span>Sort</span>
+              <span>Filters</span>
             </button>
 
             {showFilterDropdown && (
               <div className="absolute left-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-30 py-1 text-sm">
-                <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">Sort By</div>
-                {(["none", "name", "age", "course"] as SortField[]).map((field) => (
+                <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">Show Column</div>
+                {(["none", "name", "course"] as SortField[]).map((field) => (
                   <button
                     key={field}
                     onClick={() => { setSortField(field); setShowFilterDropdown(false); }}
@@ -79,7 +78,7 @@ export default function StudentList({
                       sortField === field ? "bg-purple-50 text-[#8b5cf6] font-semibold" : "text-[#1e293b] hover:bg-slate-50"
                     }`}
                   >
-                    {field === "none" ? "Default Ordering" : field}
+                    {field === "none" ? "Show All Columns" : `Only ${field}s`}
                   </button>
                 ))}
               </div>
@@ -120,7 +119,7 @@ export default function StudentList({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:hidden gap-4">
+          <div className="grid grid-cols-1 md:hidden gap-4 max-h-[380px] overflow-y-auto pr-1">
             {processedStudents.map((student, idx) => (
               <div 
                 key={student.id} 
@@ -139,10 +138,12 @@ export default function StudentList({
                       )}
                     </button>
                     <div>
-                      <h4 className={`font-semibold text-slate-950 ${activeTab === "completed" ? "line-through text-slate-400 font-normal" : ""}`}>
-                        {student.name}
-                      </h4>
-                      {activeTab === "pending" && (
+                      {(sortField === "none" || sortField === "name") && (
+                        <h4 className={`font-semibold text-slate-950 ${activeTab === "completed" ? "line-through text-slate-400 font-normal" : ""}`}>
+                          {student.name}
+                        </h4>
+                      )}
+                      {sortField === "none" && activeTab === "pending" && (
                         <p className="text-xs text-slate-400 truncate max-w-[180px] xs:max-w-xs">{student.email}</p>
                       )}
                     </div>
@@ -154,18 +155,20 @@ export default function StudentList({
 
                 <div className="flex items-center justify-between border-t border-slate-50 pt-2.5 text-xs">
                   <div className="flex space-x-4 text-slate-500">
-                    {activeTab === "pending" && (
+                    {sortField === "none" && activeTab === "pending" && (
                       <div>
                         <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Age</span>
                         <span className="font-medium text-slate-700">{student.age} y/o</span>
                       </div>
                     )}
-                    <div>
-                      <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Course</span>
-                      <span className={`font-medium text-slate-700 ${activeTab === "completed" ? "text-slate-400 font-normal line-through" : ""}`}>
-                        {student.course}
-                      </span>
-                    </div>
+                    {(sortField === "none" || sortField === "course") && (
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Course</span>
+                        <span className={`font-medium text-slate-700 ${activeTab === "completed" ? "text-slate-400 font-normal line-through" : ""}`}>
+                          {student.course}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center space-x-2">
@@ -190,20 +193,28 @@ export default function StudentList({
           </div>
 
           <div className="hidden md:block bg-white rounded-2xl border border-slate-100 w-full mx-auto overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto overflow-y-auto max-h-[320px]">
+              <table className="w-full text-left border-collapse table-fixed">
                 <thead>
-                  <tr className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400 bg-slate-50/70">
-                    <th className="py-4 text-center w-[8%]">Index</th>
-                    <th className="py-4 px-4 w-[28%]">Name</th>
-                    {activeTab === "pending" && (
+                  <tr className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400 bg-slate-50 sticky top-0 z-10 shadow-[0_1px_0_0_rgba(241,245,249,1)]">
+                    <th className="py-4 text-center w-[8%] bg-slate-50">Index</th>
+                    
+                    {(sortField === "none" || sortField === "name") && (
+                      <th className={`py-4 px-4 bg-slate-50 ${sortField === "name" ? "w-[80%]" : "w-[28%]"}`}>Name</th>
+                    )}
+                    
+                    {sortField === "none" && activeTab === "pending" && (
                       <>
-                        <th className="py-4 px-2 w-[10%]">Age</th>
-                        <th className="py-4 px-2 w-[28%]">Email</th>
+                        <th className="py-4 px-2 w-[10%] bg-slate-50">Age</th>
+                        <th className="py-4 px-2 w-[28%] bg-slate-50">Email</th>
                       </>
                     )}
-                    <th className="py-4 px-2 w-[24%]">Course</th>
-                    <th className="py-4 text-center w-[12%]">Actions</th>
+                    
+                    {(sortField === "none" || sortField === "course") && (
+                      <th className={`py-4 px-2 bg-slate-50 ${sortField === "course" ? "w-[80%]" : "w-[24%]"}`}>Course</th>
+                    )}
+                    
+                    <th className="py-4 text-center w-[12%] bg-slate-50">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm font-medium text-[#1e293b]">
@@ -216,34 +227,38 @@ export default function StudentList({
                         {idx + 1}
                       </td>
                       
-                      <td className="py-4 px-4 w-[28%] font-semibold truncate">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            onClick={() => onStatusChange(student.id)} 
-                            className="transition-colors flex-shrink-0"
-                          >
-                            {activeTab === "pending" ? (
-                              <Circle size={19} className="text-slate-300 hover:text-[#8b5cf6]" strokeWidth={2} />
-                            ) : (
-                              <CheckCircle2 size={19} className="text-[#8b5cf6] hover:text-slate-400" strokeWidth={2} />
-                            )}
-                          </button>
-                          <span className={activeTab === "completed" ? "line-through text-slate-400 font-normal" : ""}>
-                            {student.name}
-                          </span>
-                        </div>
-                      </td>
+                      {(sortField === "none" || sortField === "name") && (
+                        <td className={`py-4 px-4 font-semibold truncate ${sortField === "name" ? "w-[80%]" : "w-[28%]"}`}>
+                          <div className="flex items-center space-x-3">
+                            <button 
+                              onClick={() => onStatusChange(student.id)} 
+                              className="transition-colors flex-shrink-0"
+                            >
+                              {activeTab === "pending" ? (
+                                <Circle size={19} className="text-slate-300 hover:text-[#8b5cf6]" strokeWidth={2} />
+                              ) : (
+                                <CheckCircle2 size={19} className="text-[#8b5cf6] hover:text-slate-400" strokeWidth={2} />
+                              )}
+                            </button>
+                            <span className={activeTab === "completed" ? "line-through text-slate-400 font-normal" : ""}>
+                              {student.name}
+                            </span>
+                          </div>
+                        </td>
+                      )}
 
-                      {activeTab === "pending" && (
+                      {sortField === "none" && activeTab === "pending" && (
                         <>
                           <td className="py-4 px-2 w-[10%] text-slate-500">{student.age}</td>
                           <td className="py-4 px-2 w-[28%] text-slate-400 truncate font-normal">{student.email}</td>
                         </>
                       )}
 
-                      <td className={`py-4 px-2 w-[24%] truncate ${activeTab === "completed" ? "text-slate-400 font-normal" : ""}`}>
-                        {student.course}
-                      </td>
+                      {(sortField === "none" || sortField === "course") && (
+                        <td className={`py-4 px-2 truncate ${activeTab === "completed" ? "text-slate-400 font-normal" : ""} ${sortField === "course" ? "w-[80%]" : "w-[24%]"}`}>
+                          {student.course}
+                        </td>
+                      )}
 
                       <td className="py-4 w-[12%] text-center">
                         <div className="flex items-center justify-center space-x-2">

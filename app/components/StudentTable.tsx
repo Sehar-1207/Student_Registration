@@ -26,10 +26,10 @@ export default function StudentTable({
   onStatusChange,
 }: StudentTableProps) {
   return (
-    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden max-w-6xl mx-auto shadow-sm">
-      <div className="overflow-x-auto">
+    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden max-w-6xl mx-auto shadow-sm flex flex-col h-[320px]">
+      <div className="overflow-x-auto overflow-y-auto flex-1">
         <table className="w-full min-w-[900px] table-fixed border-collapse text-center">
-          <thead className="bg-slate-900 text-white text-xs uppercase tracking-wider">
+          <thead className="bg-slate-900 text-white text-xs uppercase tracking-wider sticky top-0 z-10">
             <tr>
               <th className="w-[8%] py-4 px-5 font-semibold">Index</th>
               <th className="w-[18%] py-4 px-5 font-semibold">Name</th>
