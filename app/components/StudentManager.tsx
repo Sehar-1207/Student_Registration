@@ -51,17 +51,17 @@ export default function StudentManager() {
       toast.custom(
         (t) => (
           <div
-            className={`max-w-md w-full bg-white shadow-xl rounded-xl flex flex-col p-4 border border-slate-100 transition-all duration-200 ${
-              t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            className={`w-[92vw] max-w-sm bg-white shadow-2xl rounded-2xl flex flex-col p-4 border border-slate-100/80 transition-all duration-300 pointer-events-auto relative z-[9999] ${
+              t.visible ? "animate-enter opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <div className="text-slate-800 text-sm font-medium mb-3 text-left">
-              Move completed record for <strong>{target.name}</strong> back to pending?
+            <div className="text-slate-800 text-sm font-medium mb-3 text-left break-words leading-relaxed">
+              Move completed record for <strong className="font-semibold text-slate-900">{target.name}</strong> back to pending?
             </div>
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 shrink-0">
               <button
                 onClick={() => toast.dismiss(t.id)}
-                className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition-colors"
+                className="px-3.5 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition-colors"
               >
                 Cancel
               </button>
@@ -74,7 +74,7 @@ export default function StudentManager() {
                   toast.dismiss(t.id);
                   toast.success("Record moved to pending.");
                 }}
-                className="px-3 py-1.5 rounded-lg bg-purple-600 text-white hover:bg-purple-700 font-bold text-xs transition-colors shadow-sm"
+                className="px-3.5 py-1.5 rounded-lg bg-purple-600 text-white hover:bg-purple-700 font-bold text-xs transition-colors shadow-sm"
               >
                 Move
               </button>
@@ -87,17 +87,17 @@ export default function StudentManager() {
       toast.custom(
         (t) => (
           <div
-            className={`max-w-md w-full bg-white shadow-xl rounded-xl flex flex-col p-4 border border-slate-100 transition-all duration-200 ${
-              t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            className={`w-[92vw] max-w-sm bg-white shadow-2xl rounded-2xl flex flex-col p-4 border border-slate-100/80 transition-all duration-300 pointer-events-auto relative z-[9999] ${
+              t.visible ? "animate-enter opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <div className="text-slate-800 text-sm font-medium mb-3 text-left">
-              Are you sure you want to delete <strong>{target.name}</strong>?
+            <div className="text-slate-800 text-sm font-medium mb-3 text-left break-words leading-relaxed">
+              Are you sure you want to delete <strong className="font-semibold text-slate-900">{target.name}</strong>?
             </div>
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 shrink-0">
               <button
                 onClick={() => toast.dismiss(t.id)}
-                className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition-colors"
+                className="px-3.5 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs transition-colors"
               >
                 Cancel
               </button>
@@ -108,7 +108,7 @@ export default function StudentManager() {
                   toast.dismiss(t.id);
                   toast.success("Registration deleted successfully.");
                 }}
-                className="px-3 py-1.5 rounded-lg bg-rose-500 text-white hover:bg-rose-600 font-bold text-xs transition-colors shadow-sm"
+                className="px-3.5 py-1.5 rounded-lg bg-rose-500 text-white hover:bg-rose-600 font-bold text-xs transition-colors shadow-sm"
               >
                 Delete
               </button>
@@ -146,11 +146,6 @@ export default function StudentManager() {
 
   return (
     <div className="min-h-screen bg-[#f1f5f9] text-[#1e293b]">
-      {/* CRITICAL FIXES: 
-        1. Stripped out the duplicate toast controller block container.
-        2. Removed the random raw stray slash character layout bug.
-        3. Shifted height tracking parameters down to clean up the mobile header spacing perfectly.
-      */}
       <nav className="bg-[#1a1e2b] bg-gradient-to-r from-[#1a1e2b] to-[#2d364f] shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
           <div className="flex items-center space-x-2">
