@@ -79,10 +79,7 @@ export default function StudentTable({
 
                   <td className="py-4 px-5">{student.gender}</td>
 
-                  <td
-                    className="py-4 px-5 truncate"
-                    title={student.course}
-                  >
+                  <td className="py-4 px-5 truncate" title={student.course}>
                     {student.course}
                   </td>
 

@@ -52,6 +52,7 @@ export default function StudentList({
   return (
     <div className="w-full animate-fadeIn bg-white/90 backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-white/20 space-y-6">
       
+      {/* Search and Action Bar */}
       <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm w-full max-w-2xl mx-auto">
         <div className="flex items-center gap-2 w-full sm:w-auto flex-1 sm:flex-none">
           <div className="relative flex-1 sm:flex-initial">
@@ -119,17 +120,19 @@ export default function StudentList({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:hidden gap-4 max-h-[380px] overflow-y-auto pr-1">
+          {/* UPDATED STYLISH MOBILE CARD VIEW */}
+          <div className="grid grid-cols-1 md:hidden gap-3.5 max-h-[420px] overflow-y-auto pr-1">
             {processedStudents.map((student, idx) => (
               <div 
                 key={student.id} 
-                className="bg-white rounded-xl border border-slate-100 p-4 shadow-sm flex flex-col space-y-3"
+                className="bg-white rounded-xl border border-slate-100 p-4 shadow-sm flex flex-col gap-3.5 relative overflow-hidden transition-all active:scale-[0.99]"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
+                {/* Header: Checkbox, Name, Email and Badge Tag */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
                     <button 
                       onClick={() => onStatusChange(student.id)} 
-                      className="transition-colors flex-shrink-0"
+                      className="transition-colors flex-shrink-0 mt-0.5"
                     >
                       {activeTab === "pending" ? (
                         <Circle size={20} className="text-slate-300 hover:text-[#8b5cf6]" strokeWidth={2} />
@@ -137,51 +140,61 @@ export default function StudentList({
                         <CheckCircle2 size={20} className="text-[#8b5cf6] hover:text-slate-400" strokeWidth={2} />
                       )}
                     </button>
-                    <div>
+                    
+                    <div className="flex flex-col min-w-0">
                       {(sortField === "none" || sortField === "name") && (
-                        <h4 className={`font-semibold text-slate-950 ${activeTab === "completed" ? "line-through text-slate-400 font-normal" : ""}`}>
+                        <h4 className={`font-semibold text-slate-900 tracking-tight text-base truncate ${activeTab === "completed" ? "line-through text-slate-400 font-normal" : ""}`}>
                           {student.name}
                         </h4>
                       )}
                       {(sortField === "none" || sortField === "email") && (
-                        <p className={`text-xs truncate max-w-[180px] xs:max-w-xs ${activeTab === "completed" ? "line-through text-slate-400 font-normal" : "text-slate-400"}`}>{student.email}</p>
+                        <p className={`text-xs font-medium truncate max-w-[180px] xs:max-w-xs mt-0.5 ${activeTab === "completed" ? "line-through text-slate-300 font-normal" : "text-slate-400"}`}>
+                          {student.email}
+                        </p>
                       )}
                     </div>
                   </div>
-                  <span className="text-xs font-mono font-medium text-slate-400 bg-slate-50 px-2 py-1 rounded-md">
+
+                  <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100/50 flex-shrink-0">
                     #{idx + 1}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-slate-50 pt-2.5 text-xs">
-                  <div className="flex space-x-4 text-slate-500">
+                {/* Clean Horizontal Break Divider Line */}
+                <div className="w-full h-px bg-slate-100/70" />
+
+                {/* Metadata Fields Area */}
+                <div className="flex items-center justify-between mt-0.5">
+                  <div className="flex gap-6">
                     {sortField === "none" && activeTab === "pending" && (
-                      <div>
-                        <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Age</span>
-                        <span className="font-medium text-slate-700">{student.age} y/o</span>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Age</span>
+                        <span className="text-sm font-semibold text-slate-700 mt-0.5">{student.age} y/o</span>
                       </div>
                     )}
+                    
                     {(sortField === "none" || sortField === "course") && (
-                      <div>
-                        <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Course</span>
-                        <span className={`font-medium text-slate-700 ${activeTab === "completed" ? "text-slate-400 font-normal line-through" : ""}`}>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Course</span>
+                        <span className={`text-sm font-bold text-slate-800 mt-0.5 truncate max-w-[140px] ${activeTab === "completed" ? "text-slate-400 font-normal line-through" : ""}`}>
                           {student.course}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center space-x-2">
+                  {/* Action Buttons with Interactive Highlight States */}
+                  <div className="flex items-center gap-1.5">
                     <button
                       onClick={() => onOpenEdit(student.id)}
-                      className="p-2 rounded-lg bg-slate-50 text-slate-500 hover:text-indigo-600 active:bg-indigo-50 transition-colors"
+                      className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors border border-transparent hover:border-purple-100"
                       title="Edit"
                     >
                       <Pencil size={15} />
                     </button>
                     <button
                       onClick={() => onDelete(student.id)}
-                      className="p-2 rounded-lg bg-slate-50 text-slate-500 hover:text-rose-500 active:bg-rose-50 transition-colors"
+                      className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-100"
                       title={activeTab === "completed" ? "Move to Pending" : "Delete"}
                     >
                       <Trash2 size={15} />
@@ -192,6 +205,7 @@ export default function StudentList({
             ))}
           </div>
 
+          {/* DESKTOP TABLE VIEW */}
           <div className="hidden md:block bg-white rounded-2xl border border-slate-100 w-full mx-auto overflow-hidden">
             <div className="overflow-x-auto overflow-y-auto max-h-[320px]">
               <table className="w-full text-left border-collapse table-fixed">
