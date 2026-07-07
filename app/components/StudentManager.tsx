@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import StudentList from "./StudentList";
@@ -147,7 +145,7 @@ export default function StudentManager() {
   return (
     <div className="min-h-screen bg-[#f1f5f9] text-[#1e293b]">
       <nav className="bg-[#1a1e2b] bg-gradient-to-r from-[#1a1e2b] to-[#2d364f] shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-row items-center justify-between">
           <div className="flex items-center space-x-2">
             <span className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               Student{" "}
@@ -155,35 +153,6 @@ export default function StudentManager() {
                 Hub
               </span>
             </span>
-          </div>
-
-          <div className="flex w-full sm:w-auto bg-[#374151] p-1 rounded-full shadow-inner">
-            <button
-              onClick={() => {
-                setActiveTab("pending");
-                setView("list");
-              }}
-              className={`flex-1 sm:flex-none px-5 sm:px-8 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 text-center ${
-                view === "list" && activeTab === "pending"
-                  ? "bg-gradient-to-r from-[#8b5cf6] to-[#d946ef] text-white shadow-md"
-                  : "text-gray-300 hover:text-white"
-              }`}
-            >
-              Pending Records
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("completed");
-                setView("list");
-              }}
-              className={`flex-1 sm:flex-none px-5 sm:px-8 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 text-center ${
-                view === "list" && activeTab === "completed"
-                  ? "bg-gradient-to-r from-[#8b5cf6] to-[#d946ef] text-white shadow-md"
-                  : "text-gray-300 hover:text-white"
-              }`}
-            >
-              Completed Records
-            </button>
           </div>
         </div>
       </nav>
@@ -193,6 +162,10 @@ export default function StudentManager() {
           <StudentList
             students={students}
             activeTab={activeTab}
+            setActiveTab={(tab) => {
+              setActiveTab(tab);
+              setView("list");
+            }}
             onOpenAdd={() => {
               setEditId(null);
               setView("add");

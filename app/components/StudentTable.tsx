@@ -27,7 +27,6 @@ export default function StudentTable({
   onStatusChange,
 }: StudentTableProps) {
   
-  // Pad the array dynamically so that there are always exactly 4 structural viewport slots
   const minRows = 4;
   const paddedRows = [...students];
   while (paddedRows.length < minRows) {
@@ -46,8 +45,7 @@ export default function StudentTable({
               <th className="w-[24%] py-4 px-5 font-semibold">Email</th>
               <th className="w-[10%] py-4 px-2 font-semibold">Gender</th>
               <th className="w-[16%] py-4 px-4 font-semibold">Course</th>
-              {/* CLEAN DEDICATED COLUMN SEPARATOR */}
-              <th className="w-[14%] py-4 px-4 font-semibold">Mark as Complete</th>
+              <th className="w-[14%] py-4 px-4 font-semibold">Pending</th>
               <th className="w-[10%] py-4 px-4 font-semibold">Actions</th>
             </tr>
           </thead>
@@ -62,7 +60,6 @@ export default function StudentTable({
             )}
             
             {paddedRows.map((student, idx) => {
-              // Structural empty placeholder row layout matching table bounds
               if (!student) {
                 return (
                   <tr key={`blank-row-${idx}`} className="border-b border-slate-50 last:border-none h-[53px]">
@@ -86,8 +83,6 @@ export default function StudentTable({
                   <td className="py-4 px-4 font-medium text-slate-500">
                     {idx + 1}
                   </td>
-
-                  {/* REMOVED CHECKBOX HOOK FROM INSIDE THIS TD ELEMENT */}
                   <td
                     className="py-4 px-5 font-semibold text-slate-900 truncate"
                     title={student.name}
@@ -110,7 +105,6 @@ export default function StudentTable({
                     {student.course}
                   </td>
 
-                  {/* NEW INDEPENDENT CHECKBOX DATA CELL */}
                   <td className="py-4 px-4">
                     <div className="flex items-center justify-center">
                       <input
@@ -122,7 +116,6 @@ export default function StudentTable({
                     </div>
                   </td>
 
-                  {/* ACTIONS CELLS */}
                   <td className="py-4 px-4">
                     <div className="flex items-center justify-center gap-3">
                       <button

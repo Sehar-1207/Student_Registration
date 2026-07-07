@@ -1,7 +1,5 @@
-"use client";
-
 import { useState, useMemo } from "react";
-import { Search, Plus, Pencil, Trash2, CheckCircle2, Circle } from "lucide-react";
+import { Search, Plus, Pencil, Trash2, Circle } from "lucide-react";
 import { Student } from "../components/student";
 
 type SortField = "name" | "age" | "course" | "email" | "none";
@@ -9,6 +7,7 @@ type SortField = "name" | "age" | "course" | "email" | "none";
 interface StudentListProps {
   students: Student[];
   activeTab: "pending" | "completed";
+  setActiveTab: (tab: "pending" | "completed") => void;
   onOpenAdd: () => void;
   onOpenEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -18,6 +17,7 @@ interface StudentListProps {
 export default function StudentList({
   students,
   activeTab,
+  setActiveTab,
   onOpenAdd,
   onOpenEdit,
   onDelete,
@@ -51,7 +51,7 @@ export default function StudentList({
   const paddedRows = useMemo(() => {
     const minRows = 4;
     if (processedStudents.length >= minRows) return processedStudents;
-    
+
     const extraNeeded = minRows - processedStudents.length;
     const fillers = Array(extraNeeded).fill(null);
     return [...processedStudents, ...fillers];
@@ -64,32 +64,56 @@ export default function StudentList({
   return (
     <div className="w-full animate-fadeIn bg-white/90 backdrop-blur-sm p-4 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-white/20 space-y-6">
       
-      {/* SEARCH BAR & ADD BUTTON */}
-      <div className="flex flex-row items-center gap-3 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm w-full max-w-xl mx-auto justify-center">
-        <div className="relative flex-1 max-w-xs">
-          <input
-            type="text"
-            placeholder="Search name, email or course..."
-            value={searchItem}
-            onChange={(e) => setSearchItem(e.target.value)}
-            className="w-full bg-slate-50 pl-10 pr-4 py-2.5 rounded-xl text-sm border border-transparent text-[#1e293b] focus:outline-none focus:bg-white focus:border-purple-200 transition-all"
-          />
-          <Search size={16} className="absolute left-3.5 top-3.5 text-slate-400" />
+      <div className="flex flex-col items-center gap-4 w-full max-w-xl mx-auto">
+        {/* Searchbar Container */}
+        <div className="flex flex-row items-center gap-3 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm w-full justify-center">
+          <div className="relative flex-1 max-w-xs sm:max-w-none">
+            <input
+              type="text"
+              placeholder="Search name, email or course..."
+              value={searchItem}
+              onChange={(e) => setSearchItem(e.target.value)}
+              className="w-full bg-slate-50 pl-10 pr-4 py-2.5 rounded-xl text-sm border border-transparent text-[#1e293b] focus:outline-none focus:bg-white focus:border-purple-200 transition-all"
+            />
+            <Search size={16} className="absolute left-3.5 top-3.5 text-slate-400" />
+          </div>
+
+          <button
+            onClick={onOpenAdd}
+            className="px-5 py-2.5 bg-gradient-to-r from-[#8b5cf6] to-[#d946ef] hover:opacity-90 text-white text-sm font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md shadow-purple-500/10 flex-shrink-0"
+          >
+            <Plus size={16} />
+            <span>Add</span>
+          </button>
         </div>
 
-        <button
-          onClick={onOpenAdd}
-          className="px-5 py-2.5 bg-gradient-to-r from-[#8b5cf6] to-[#d946ef] hover:opacity-90 text-white text-sm font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md shadow-purple-500/10 flex-shrink-0"
-        >
-          <Plus size={16} />
-          <span>Add</span>
-        </button>
+        {/* Pending / Completed Tabs Rendered Below Searchbar */}
+        <div className="flex w-full bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
+          <button
+            onClick={() => setActiveTab("pending")}
+            className={`flex-1 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-center ${
+              activeTab === "pending"
+                ? "bg-white text-purple-600 shadow-sm font-bold"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            Pending Records
+          </button>
+          <button
+            onClick={() => setActiveTab("completed")}
+            className={`flex-1 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-center ${
+              activeTab === "completed"
+                ? "bg-white text-purple-600 shadow-sm font-bold"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            Completed Records
+          </button>
+        </div>
       </div>
 
-      {/* WORKSPACE FLEX WRAPPER - SIDE FILTER INTERFACE */}
       <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
         
-        {/* PERSISTENT EXTERNAL SIDE FILTER PANEL */}
         <div className="w-full lg:w-48 bg-slate-50/60 rounded-xl p-4 border border-slate-100 shrink-0">
           <div className="flex flex-col gap-2 text-xs text-slate-500 font-bold">
             <span className="text-purple-600 uppercase tracking-wide text-[10px]">Filter</span>
@@ -134,11 +158,10 @@ export default function StudentList({
           </div>
         </div>
 
-        {/* DATA PRESENTATION MATRIX CONTAINER */}
         <div className="w-full flex-1 min-w-0">
           
-          {/* MOBILE LIST LAYOUT */}
-          <div className="grid grid-cols-1 md:hidden gap-2 max-h-[352px] min-h-[352px] overflow-y-auto pr-1 relative border border-slate-100 rounded-xl p-1 bg-slate-50/20">
+          {/* Mobile View with Hidden Scrollbar */}
+          <div className="grid grid-cols-1 md:hidden gap-2 max-h-[352px] min-h-[352px] overflow-y-auto pr-1 relative border border-slate-100 rounded-xl p-1 bg-slate-50/20 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {processedStudents.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-medium text-sm pointer-events-none bg-white/50 backdrop-blur-[1px]">
                 No record found
@@ -158,7 +181,6 @@ export default function StudentList({
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 w-full min-w-0">
                       
-                      {/* SHOW MOBILE CHECKBOX ONLY IF VIEWING PENDING TABLE */}
                       {activeTab === "pending" && (
                         <button onClick={() => onStatusChange(student.id)} className="transition-colors flex-shrink-0 mt-0.5">
                           <Circle size={17} className="text-slate-300 hover:text-[#8b5cf6]" strokeWidth={2} />
@@ -214,14 +236,14 @@ export default function StudentList({
             })}
           </div>
 
-          {/* DESKTOP TABLE VIEW */}
+          {/* Desktop View with Hidden Scrollbar */}
           <div className="hidden md:block bg-white rounded-2xl border border-slate-100 w-full mx-auto overflow-hidden relative">
             {processedStudents.length === 0 && (
               <div className="absolute top-[53px] inset-x-0 bottom-0 flex items-center justify-center text-slate-400 font-medium text-sm pointer-events-none bg-white/50 backdrop-blur-[1px] z-20">
                 No record found
               </div>
             )}
-            <div className="overflow-x-auto overflow-y-auto max-h-[241px] min-h-[241px]">
+            <div className="overflow-x-auto overflow-y-auto max-h-[241px] min-h-[241px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <table className="w-full text-left border-collapse table-fixed">
                 <thead>
                   <tr className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400 bg-slate-50 sticky top-0 z-30 shadow-[0_1px_0_0_rgba(241,245,249,1)]">
@@ -232,7 +254,7 @@ export default function StudentList({
                     {(sortField === "none" || sortField === "course") && <th className="py-4 px-2 bg-slate-50 w-[21%]">Course</th>}
                     
                     {activeTab === "pending" && (
-                      <th className="py-4 text-center bg-slate-50 w-[15%]">Mark as Complete</th>
+                      <th className="py-4 text-center bg-slate-50 w-[15%]">Pending</th>
                     )}
                     
                     <th className="py-4 text-center bg-slate-50 w-[12%]">Actions</th>
